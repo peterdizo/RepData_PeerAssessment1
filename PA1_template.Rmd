@@ -5,10 +5,11 @@
 First, unzip the data and load the dataset
 ```{r}
 unzip("activity.zip")
-activity <- read.csv("C:/Users/DG/RepData_PeerAssessment1/activity.csv")
+activity <- read.csv("activity.csv")
 ```
 Import data.table library and create new data table for better data handling
 ```{r}
+install.packages("data.table")
 library(data.table)
 activityDT <- data.table(activity)
 ```
@@ -86,7 +87,9 @@ weekday <- data.table(newActivity[newActivity$weekend == "weekday",])
 weekend <- weekend[, lapply(.SD, mean, na.rm = TRUE), by = interval]
 weekday <- weekday[, lapply(.SD, mean, na.rm = TRUE), by = interval]
 newData <- rbind(weekend,weekday)
-xyplot(steps ~ interval | weekend, data = newData, layout = c(1, 2), type = "l")
+lbl <- rbind("weekend","weekday")
+f <- factor(newData$weekend, labels = c("Weekday", "Weekend"))
+xyplot(steps ~ interval | f, data = newData, layout = c(1, 2), type = "l")
 ```
 
 
